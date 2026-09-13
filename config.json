@@ -8,7 +8,7 @@
     "time_display": "7:00 PM onwards",
     "venue_name": "The Lawns",
     "venue_address": "ITI Circle, Jodhpur",
-    "dress_code": "White",
+    "dress_code": "All white",
     "cause_line": "Every entry funds our new 4 Classroom project at Mahatma Gandhi Government School, CHB, Jodhpur."
   },
   "pricing": {
@@ -21,7 +21,11 @@
     "qr_image": "assets/payment-qr.png"
   },
   "contact": {
-    "whatsapp_number": "919950199500"
+    "whatsapp_number": "91XXXXXXXXXX"
+  },
+  "messages": {
+    "success_title": "You're booked",
+    "success_body": "We've received your details and payment screenshot. Our team will confirm on WhatsApp shortly. See you on the dance floor."
   },
   "referral_options": [
     "Instagram",
