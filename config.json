@@ -1,20 +1,21 @@
- {
+{
   "APPS_SCRIPT_URL": "https://script.google.com/macros/s/AKfycbwJowenCOY4MaT7Y8uvzVOCAf61q_ORcjEq2TEwcPll7qgpv2bMNlWYOoAW9xwfFxgD/exec",
   "event": {
     "name": "Safed Raas 2.0",
     "page_title": "Safed Raas 2.0 — Reserve Your Spot",
-    "tagline": "Where Celebration Meets Purpose. Dance. Celebrate. Give Back.",
+    "tagline": "Where Celebration Meets Purpose./n <strong>Dance. Celebrate. Give Back.</strong>",
     "date_display": "17 October 2026",
     "time_display": "7:00 PM onwards",
     "venue_name": "The Lawns",
     "venue_address": "ITI Circle, Jodhpur",
     "dress_code": "All white",
-    "cause_line": "Every entry funds our new 4 Classroom project at Mahatma Gandhi Government School, CHB, Jodhpur."
+    "cause_line": "Every entry is a step towards a brighter classroom and a brighter future. Supporting our 4-Classroom Project at Mahatma Gandhi Government School, CHB, Jodhpur."
   },
   "pricing": {
     "currency_symbol": "₹",
     "amount_per_person": 299,
-    "note": "per person for Pre-booking"
+    "note": "per person for Pre-booking",
+    "prebooking_notice": "This payment <strong>secures your spot for Safed Raas</strong> and is only a pre-booking amount./n/n The <strong>remaining balance</strong> is payable in <strong>cash or UPI</strong> when you collect your pass from <strong>PASS PICKUP LOCATION, on or before 10th October</strong>./n/n <em>Your pass will be issued upon payment of the remaining balance.</em>"
   },
   "payment": {
     "upi_id": "9024313079@ybl",
@@ -34,7 +35,7 @@
   "default_phone_country": "91",
   "messages": {
     "success_title": "You're booked",
-    "success_body": "We've received your details and payment screenshot. Our team will confirm on WhatsApp shortly. See you on the dance floor."
+    "success_body": "<strong>We've received your details and payment screenshot.</strong>\n\nPlease note that this payment is <strong>only a pre-booking amount to reserve your pass(es)</strong>. Your booking will be verified by our team, and the <strong>remaining balance amount will be payable at the time of pass collection.</strong>\n\nOur team will confirm your pre-booking on WhatsApp shortly.\n\n<strong>Thank you for being part of Safed Raas. See you on the dance floor!</strong>"
   },
   "referral_options": [
     "Instagram",
