@@ -287,6 +287,23 @@
     appearance:none;
   }
 
+  .phone-row{
+    display:flex;
+    gap:10px;
+  }
+
+  .phone-row select{
+    flex: 0 0 auto;
+    width:auto;
+    max-width:118px;
+    padding-right:30px;
+  }
+
+  .phone-row input{
+    flex:1 1 auto;
+    min-width:0;
+  }
+
   input:focus, select:focus{
     outline:none;
     border-color: var(--gold);
@@ -540,7 +557,7 @@
 <section class="cause">
   <div class="wrap">
     <p id="cause-line">Every entry funds new classrooms at a Jodhpur government school.</p>
-    <div class="credit">A initiative by Jodhpur Round Table 273</div>
+    <div class="credit">A Initiative by Jodhpur Round Table 273</div>
   </div>
 </section>
 
@@ -561,7 +578,11 @@
 
         <div class="field">
           <label for="phone">WhatsApp number</label>
-          <input type="tel" id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="10-digit mobile number" required>
+          <div class="phone-row">
+            <select id="phone-country" aria-label="Country code"></select>
+            <input type="tel" id="phone" name="phone" inputmode="numeric" autocomplete="tel-national" placeholder="Mobile number" required>
+          </div>
+          <input type="text" id="phone-country-custom" inputmode="numeric" placeholder="Country code, e.g. 44" style="display:none; margin-top:8px;">
         </div>
 
         <div class="field">
@@ -692,7 +713,71 @@
       select.appendChild(o);
     });
 
+    const phoneSelect = document.getElementById('phone-country');
+    phoneSelect.innerHTML = '';
+    (cfg.phone_countries || []).forEach(c => {
+      const o = document.createElement('option');
+      o.value = c.dial_code;
+      o.textContent = '+' + c.dial_code + ' ' + c.name;
+      phoneSelect.appendChild(o);
+    });
+    const otherOpt = document.createElement('option');
+    otherOpt.value = 'other';
+    otherOpt.textContent = 'Other';
+    phoneSelect.appendChild(otherOpt);
+    phoneSelect.value = cfg.default_phone_country || (cfg.phone_countries && cfg.phone_countries[0] && cfg.phone_countries[0].dial_code) || 'other';
+    updatePhoneUI();
+
     updatePayAmount();
+  }
+
+  // Country code + mobile number
+  const phoneCountrySelect = document.getElementById('phone-country');
+  const phoneCustomInput = document.getElementById('phone-country-custom');
+  const phoneInput = document.getElementById('phone');
+
+  function updatePhoneUI(){
+    const selected = phoneCountrySelect.value;
+    if (selected === 'other'){
+      phoneCustomInput.style.display = 'block';
+      phoneInput.placeholder = 'Mobile number';
+    } else {
+      phoneCustomInput.style.display = 'none';
+      const country = ((CONFIG && CONFIG.phone_countries) || []).find(c => c.dial_code === selected);
+      phoneInput.placeholder = country ? (country.digits + '-digit mobile number') : 'Mobile number';
+    }
+  }
+  phoneCountrySelect.addEventListener('change', updatePhoneUI);
+
+  /**
+   * Validates the mobile number against the selected country's expected
+   * digit count (or a loose 6-14 digit range for "Other"), and returns the
+   * combined "+<dialcode> <number>" string used both for the sheet and the
+   * WhatsApp link.
+   */
+  function validatePhone(){
+    const selected = phoneCountrySelect.value;
+    const localDigits = phoneInput.value.replace(/\D/g, '');
+
+    if (selected === 'other'){
+      const customDial = phoneCustomInput.value.replace(/\D/g, '');
+      if (!customDial){
+        return { valid:false, message:'Please enter a country code.' };
+      }
+      if (localDigits.length < 6 || localDigits.length > 14){
+        return { valid:false, message:'Please enter a valid mobile number.' };
+      }
+      return { valid:true, combined: '+' + customDial + ' ' + localDigits };
+    }
+
+    const country = ((CONFIG && CONFIG.phone_countries) || []).find(c => c.dial_code === selected);
+    if (!country){
+      return { valid:false, message:'Please select a country code.' };
+    }
+    if (localDigits.length !== country.digits){
+      return { valid:false, message:'Please enter a valid ' + country.digits + '-digit mobile number for ' + country.name + '.' };
+    }
+    return { valid:true, combined: '+' + country.dial_code + ' ' + localDigits };
   }
 
   // Guest stepper + live total due
@@ -792,10 +877,16 @@
     msg.textContent = '';
 
     const name = document.getElementById('name').value.trim();
-    const phone = document.getElementById('phone').value.trim();
 
-    if (!name || !phone){
-      msg.textContent = 'Please add your name and WhatsApp number.';
+    if (!name){
+      msg.textContent = 'Please add your name.';
+      msg.classList.add('error');
+      return;
+    }
+
+    const phoneCheck = validatePhone();
+    if (!phoneCheck.valid){
+      msg.textContent = phoneCheck.message;
       msg.classList.add('error');
       return;
     }
@@ -817,7 +908,7 @@
     const payload = {
       submissionId: SUBMISSION_ID,
       name: name,
-      phone: phone,
+      phone: phoneCheck.combined,
       guests: guestCount.textContent,
       referral: document.getElementById('referral').value,
       amountDue: document.getElementById('pay-total').textContent,
