@@ -4,16 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="page-title">Loading… — Reserve Your Spot</title>
-<meta name="description" id="page-description" content="Safed Raas is a purpose-driven Garba celebration where
-festivity meets meaningful impact. Dressed in the
-elegance of white and gold, the evening brings together
-music, dance and community spirit to further Jodhpur Round
-Table’s mission of Freedom Through Education.
-
-Through Safed Raas, we raise support for better schools
-and brighter educational opportunities for children—
-turning every step of Raas into a step towards a brighter
-future.">
+<meta name="description" id="page-description" content="Pre-book your spot — a white-attire Garba night by Jodhpur Round Table 273, raising funds for a school's new classrooms.">
 <link rel="icon" type="image/png" href="assets/logo.png">
 <meta property="og:title" content="Safed Raas 2.0">
 <meta property="og:description" content="A white-attire Garba night — pre-book your spot.">
@@ -507,7 +498,7 @@ future.">
   }
 
   .success h2{ font-size:1.7rem; margin-bottom:12px; }
-  .success p{ color: var(--safed-dim); max-width:34ch; margin:0 auto; }
+  .success p{ color: var(--safed-dim); max-width:34ch; margin:0 auto; white-space:pre-line; }
 
   /* ---------- Footer ---------- */
 
@@ -522,6 +513,26 @@ future.">
   footer a{ color: var(--gold-light); text-decoration:none; }
 
   .btn[disabled]{ opacity:0.6; cursor:not-allowed; }
+
+  /* ---------- Pre-booking notice ---------- */
+
+  .prebook-notice{
+    background: rgba(195,141,58,0.1);
+    border:1px solid rgba(195,141,58,0.4);
+    border-radius:6px;
+    padding:14px 16px;
+    margin-bottom:20px;
+    font-size:0.86rem;
+    line-height:1.55;
+    color: var(--safed-dim);
+  }
+
+  .prebook-notice strong{
+    display:block;
+    color: var(--gold-light);
+    font-size:0.9rem;
+    margin-bottom:4px;
+  }
 </style>
 </head>
 <body>
@@ -615,9 +626,14 @@ future.">
         <div class="pay-card">
           <div class="pay-amount">
             <span class="num" id="pay-total">₹0</span>
-            <span class="note">total for <span id="pay-guest-count">1</span> guest(s)</span>
+            <span class="note">total for <span id="pay-guest-count-text">1 guest</span></span>
           </div>
           <div class="per-person-note" id="per-person-note"></div>
+
+          <div class="prebook-notice">
+            <strong>This is a pre-booking amount, not the full pass price.</strong>
+            <span id="prebook-notice-text"></span>
+          </div>
 
           <div class="qr-box">
             <img id="qr-img" src="assets/payment-qr.png" alt="UPI QR code for payment">
@@ -695,12 +711,12 @@ future.">
       (nameParts.length ? nameParts.join(' ') + ' ' : '') + '<em>' + accent + '</em>';
 
     document.getElementById('hero-when').textContent = e.date_display + ' · ' + e.time_display;
-    document.getElementById('hero-tagline').textContent = e.tagline;
+    document.getElementById('hero-tagline').innerHTML = e.tagline;
     document.getElementById('d-date').textContent = e.date_display;
     document.getElementById('d-time').textContent = e.time_display;
     document.getElementById('d-venue').textContent = e.venue_name + ', ' + e.venue_address;
     document.getElementById('d-dress').textContent = e.dress_code;
-    document.getElementById('cause-line').textContent = e.cause_line;
+    document.getElementById('cause-line').innerHTML = e.cause_line;
 
     document.getElementById('qr-img').src = pay.qr_image;
     document.getElementById('upi-id').textContent = pay.upi_id;
@@ -711,7 +727,7 @@ future.">
 
     if (cfg.messages){
       document.getElementById('success-title').textContent = cfg.messages.success_title;
-      document.getElementById('success-body').textContent = cfg.messages.success_body;
+      document.getElementById('success-body').innerHTML = cfg.messages.success_body;
     }
 
     const select = document.getElementById('referral');
@@ -799,9 +815,10 @@ future.">
     const total = p.amount_per_person * guests;
 
     document.getElementById('pay-total').textContent = p.currency_symbol + total;
-    document.getElementById('pay-guest-count').textContent = guests;
+    document.getElementById('pay-guest-count-text').textContent = guests + (guests === 1 ? ' guest' : ' guests');
     document.getElementById('per-person-note').textContent =
       p.currency_symbol + p.amount_per_person + ' ' + p.note;
+    document.getElementById('prebook-notice-text').innerHTML = p.prebooking_notice || '';
   }
 
   document.getElementById('minus').addEventListener('click', () => {
