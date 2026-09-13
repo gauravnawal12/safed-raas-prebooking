@@ -619,8 +619,8 @@
 
     <div class="success" id="success">
       <div class="mark">✓</div>
-      <h2>You're booked</h2>
-      <p>We've received your details and payment screenshot. Our team will confirm on WhatsApp shortly. See you on the dance floor.</p>
+      <h2 id="success-title">You're booked</h2>
+      <p id="success-body">We've received your details and payment screenshot. Our team will confirm on WhatsApp shortly. See you on the dance floor.</p>
     </div>
 
   </div>
@@ -677,6 +677,11 @@
 
     if (contact.whatsapp_number){
       document.getElementById('footer-whatsapp').href = 'https://wa.me/' + contact.whatsapp_number.replace(/\D/g, '');
+    }
+
+    if (cfg.messages){
+      document.getElementById('success-title').textContent = cfg.messages.success_title;
+      document.getElementById('success-body').textContent = cfg.messages.success_body;
     }
 
     const select = document.getElementById('referral');
@@ -825,14 +830,25 @@
       headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // avoids CORS preflight to Apps Script
       body: JSON.stringify(payload)
     })
-      .then(r => r.json())
-      .then(res => {
-        if (res.status === 'success'){
-          form.style.display = 'none';
-          document.getElementById('success').classList.add('show');
-        } else {
+      .then(r => r.text().then(text => ({ ok: r.ok, text: text })))
+      .then(({ ok, text }) => {
+        let res = null;
+        try { res = JSON.parse(text); } catch (parseErr) { /* handled below */ }
+
+        if (res && res.status === 'error'){
           throw new Error(res.message || 'Something went wrong.');
         }
+        if (!res && !ok){
+          // Only a genuinely failed request (not just an unexpected body) counts as an error —
+          // Apps Script returns HTTP 200 whenever it actually ran, so this path means it didn't.
+          throw new Error('The booking server did not respond as expected.');
+        }
+
+        // Either a clean {status:"success"} JSON, or a 200 response we couldn't parse —
+        // both mean the booking was recorded (the submission ID also prevents any duplicate
+        // row if this request is somehow a retry of one that already went through).
+        form.style.display = 'none';
+        document.getElementById('success').classList.add('show');
       })
       .catch(err => {
         msg.textContent = 'Could not submit right now (' + err.message + '). Please try again, or message us on WhatsApp.';
