@@ -1,4 +1,4 @@
-{
+ {
   "APPS_SCRIPT_URL": "https://script.google.com/macros/s/AKfycbxlBMjsBrGSyrGec5w01t-ZCVIobvRJ8Uj2MBPDk-Q8uG_dcf69Nabsw8QBtJsKQp_8/exec",
   "event": {
     "name": "Safed Raas 2.0",
@@ -23,6 +23,15 @@
   "contact": {
     "whatsapp_number": "91XXXXXXXXXX"
   },
+  "phone_countries": [
+    { "name": "India", "dial_code": "91", "digits": 10 },
+    { "name": "United States/Canada", "dial_code": "1", "digits": 10 },
+    { "name": "United Kingdom", "dial_code": "44", "digits": 10 },
+    { "name": "UAE", "dial_code": "971", "digits": 9 },
+    { "name": "Singapore", "dial_code": "65", "digits": 8 },
+    { "name": "Australia", "dial_code": "61", "digits": 9 }
+  ],
+  "default_phone_country": "91",
   "messages": {
     "success_title": "You're booked",
     "success_body": "We've received your details and payment screenshot. Our team will confirm on WhatsApp shortly. See you on the dance floor."
