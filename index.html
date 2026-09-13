@@ -557,7 +557,7 @@
 <section class="cause">
   <div class="wrap">
     <p id="cause-line">Every entry funds new classrooms at a Jodhpur government school.</p>
-    <div class="credit">A Initiative by Jodhpur Round Table 273</div>
+    <div class="credit">Hosted by Jodhpur Round Table 273</div>
   </div>
 </section>
 
@@ -767,7 +767,7 @@
       if (localDigits.length < 6 || localDigits.length > 14){
         return { valid:false, message:'Please enter a valid mobile number.' };
       }
-      return { valid:true, combined: '+' + customDial + ' ' + localDigits };
+      return { valid:true, combined: '+' + customDial + localDigits };
     }
 
     const country = ((CONFIG && CONFIG.phone_countries) || []).find(c => c.dial_code === selected);
@@ -777,7 +777,7 @@
     if (localDigits.length !== country.digits){
       return { valid:false, message:'Please enter a valid ' + country.digits + '-digit mobile number for ' + country.name + '.' };
     }
-    return { valid:true, combined: '+' + country.dial_code + ' ' + localDigits };
+    return { valid:true, combined: '+' + country.dial_code + localDigits };
   }
 
   // Guest stepper + live total due
