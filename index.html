@@ -636,6 +636,14 @@
   let CONFIG = null;
   let screenshotBase64 = null;
   let screenshotMimeType = null;
+  let isSubmitting = false;
+
+  // Generated once per page load. Sent with the booking so the backend can
+  // recognise and ignore a duplicate POST (double-tap, slow network retry, etc.)
+  // instead of writing a second row.
+  const SUBMISSION_ID = (window.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : 'sub-' + Date.now() + '-' + Math.random().toString(36).slice(2);
 
   fetch('config.json')
     .then(r => r.json())
@@ -772,6 +780,9 @@
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
+
+    if (isSubmitting) return; // guards against a double-tap firing two submit events
+
     msg.classList.remove('error');
     msg.textContent = '';
 
@@ -794,10 +805,12 @@
       return;
     }
 
+    isSubmitting = true;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Confirming…';
 
     const payload = {
+      submissionId: SUBMISSION_ID,
       name: name,
       phone: phone,
       guests: guestCount.textContent,
@@ -824,6 +837,7 @@
       .catch(err => {
         msg.textContent = 'Could not submit right now (' + err.message + '). Please try again, or message us on WhatsApp.';
         msg.classList.add('error');
+        isSubmitting = false;
         submitBtn.disabled = false;
         submitBtn.textContent = 'Confirm my booking';
       });
