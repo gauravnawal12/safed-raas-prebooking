@@ -1,0 +1,27 @@
+{
+  "APPS_SCRIPT_URL": "https://script.google.com/macros/s/AKfycbz2jEc82TseftNPzinl8kV8m1Q-xZAFc86GPhT7sJHbrQp6oEWIdIUCvTM-D6nOSr5Z/exec",
+  "event": {
+    "name": "Safed Raas 2.0",
+    "date_display": "17 October 2026",
+    "time_display": "7:00 PM onwards",
+    "venue_name": "The Lawns",
+    "venue_address": "ITI Circle, Jodhpur",
+    "dress_code": "All white"
+    "cause_line": "Every entry funds our new 4 Classroom project at Mahatma Gandhi Government School, CHB, Jodhpur."
+  },
+  "pricing": {
+    "amount_display": "₹299",
+    "amount_note": "per person for Pre-booking"
+  },
+  "payment": {
+    "upi_id": "9024313079@ybl",
+    "qr_image": "assets/payment-qr.png"
+  },
+  "referral_options": [
+    "Instagram",
+    "WhatsApp",
+    "Friend / Family",
+    "Round Table Member",
+    "Other"
+  ]
+}
